@@ -35,6 +35,10 @@ java {
     }
 }
 
+javadoc {
+    exclude 'example/app/**'
+}
+
 application {
     // Define the main class for the application.
     mainClass = 'example.app.App'

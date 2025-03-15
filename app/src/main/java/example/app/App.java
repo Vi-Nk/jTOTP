@@ -3,11 +3,19 @@
  */
 package example.app;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import dev.vink.jtotp.*;
 
 public class App {
     public static void main(String[] args) {
         String secret = SecretKeyGenerator.generate();
         System.out.println(secret);
+        Map<String, String> query = new HashMap<>();
+        query.put(OtpUtils.SECRET, secret);
+        query.put(OtpUtils.ISSUER, "ACME");
+        String otpUrl = OtpUtils.createOtpUrl("totp", "testUser:User@example.com", query);
+        System.out.println(otpUrl);
     }
 }
