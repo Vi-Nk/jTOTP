@@ -10,7 +10,7 @@ public class HMACUtilsTest {
     void calculateHMACfromInput() {
         String key = "VOJ2PWJSQDGIL2Z5WEKGD6ZHWDYC3X5U";
         String data = "1234567890";
-        String expected = "1a3e957426f414e04ffc174aa569f7ad1017fa6c83d72f02cb224ed0763095ce";
+        String expected = "c687a99a751129c4392c5236d2bfd771cbe87f68";
         assertDoesNotThrow(() -> {
             byte[] calculateHMAC = HMACUtils.calculateHMAC(key, data);
             String hexHMAC = HMACUtils.toHex(calculateHMAC);

@@ -3,13 +3,16 @@
  */
 package example.app;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
 import dev.vink.jtotp.*;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException {
         String secret = SecretKeyGenerator.generate();
         System.out.println(secret);
         Map<String, String> query = new HashMap<>();
@@ -17,5 +20,12 @@ public class App {
         query.put(OtpUtils.ISSUER, "ACME");
         String otpUrl = OtpUtils.createOtpUrl("totp", "testUser:User@example.com", query);
         System.out.println(otpUrl);
+
+        String key = "VOJ2PWJSQDGIL2Z5WEKGD6ZHWDYC3X5U";
+        String data = "1234567890";
+
+        String totp = TOTPGenerator.generateTOTPfromHMAC(new byte[] {(byte)0x1f,(byte)0x86,(byte)0x98,(byte)0x69,(byte)0x0e,(byte)0x02,(byte)0xca,(byte)0x16,(byte)0x61,(byte)0x85,(byte)0x50,(byte)0xef,(byte)0x7f,(byte)0x19,(byte)0xda,(byte)0x8e,(byte)0x94,(byte)0x5b,(byte)0x55,(byte)0x5a
+        },6);
+        System.out.println(totp);
     }
 }
