@@ -1,6 +1,5 @@
 # jTOTP - Java Time-based One-Time Password Generator
 [![Build status](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml/badge.svg?branch=main)](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml)
-![Coverage](.github/badges/jacoco.svg)
 ![GitHub License](https://img.shields.io/github/license/Vi-Nk/jTOTP)
 
 
