@@ -13,19 +13,29 @@ import dev.vink.jtotp.*;
 
 public class App {
     public static void main(String[] args) throws InvalidKeyException, UnsupportedEncodingException, NoSuchAlgorithmException {
-        String secret = SecretKeyGenerator.generate();
-        System.out.println(secret);
+        // Generate a secret key
+        System.out.println("Generated Default / SHA1 Secret: " + SecretKeyGenerator.generate());
+        System.out.println("Generate secret for SHA256: " + SecretKeyGenerator.generate(SecretKeyGenerator.SHA256_BITS));
+        System.out.println("Generate secret for SHA512: " + SecretKeyGenerator.generate(SecretKeyGenerator.SHA512_BITS));
+
+        // Create an OTP URL
         Map<String, String> query = new HashMap<>();
-        query.put(OtpUtils.SECRET, secret);
+        query.put(OtpUtils.SECRET, SecretKeyGenerator.generate());
         query.put(OtpUtils.ISSUER, "ACME");
+        query.put(OtpUtils.ALGORITHM, "HmacSHA1");
+        query.put(OtpUtils.DIGITS, "6");
+        query.put(OtpUtils.PERIOD, "30");
         String otpUrl = OtpUtils.createOtpUrl("totp", "testUser:User@example.com", query);
-        System.out.println(otpUrl);
+        System.out.println("Generated OTP URL: " + otpUrl);
 
-        String key = "VOJ2PWJSQDGIL2Z5WEKGD6ZHWDYC3X5U";
-        String data = "1234567890";
-
-        String totp = TOTPGenerator.generateTOTPfromHMAC(new byte[] {(byte)0x1f,(byte)0x86,(byte)0x98,(byte)0x69,(byte)0x0e,(byte)0x02,(byte)0xca,(byte)0x16,(byte)0x61,(byte)0x85,(byte)0x50,(byte)0xef,(byte)0x7f,(byte)0x19,(byte)0xda,(byte)0x8e,(byte)0x94,(byte)0x5b,(byte)0x55,(byte)0x5a
-        },6);
-        System.out.println(totp);
+        // Generate a TOTP using TOTPGenerator with Builder
+        TOTPGenerator generator = new TOTPGenerator.Builder()
+                .fromOtpUrl(otpUrl)
+                .build();
+        //Get TOTP from Generator
+        System.out.println("Now: " +generator.now());
+        System.out.println("Next : " +generator.next());
+        System.out.println("With Custom Drift: "+ generator.generateWithDrift(1));
+        System.out.println("With Custom time: "+ generator.generateWithTime(1234567890L));
     }
 }

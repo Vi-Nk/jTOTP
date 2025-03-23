@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * Utility class for generating OTP (One-Time Password) URLs.
- * <p>
+* <p>
  * This class provides methods to create OTP URLs following the
  * <a href=
  * "https://github.com/google/google-authenticator/wiki/Key-Uri-Format">Key URI

@@ -12,26 +12,53 @@ import javax.crypto.spec.SecretKeySpec;
  * and converting byte arrays to hexadecimal strings.
  */
 public class HMACUtils {
-    public static final String ALGORITHM = "HmacSHA1";
 
     /**
-     * Calculates the HMAC of the given data using the specified key.
-     *
-     * @param key  The secret key used for HMAC generation.
-     * @param data The data to be hashed.
-     * @return A byte array representing the HMAC of the input data.
-     * @throws UnsupportedEncodingException If the character encoding is not supported.
-     * @throws NoSuchAlgorithmException     If the HMAC algorithm is not available.
-     * @throws InvalidKeyException          If the provided key is invalid.
+     * Algorithm input for TOTP Builder for HMAC-SHA1.
      */
-    public static byte[] calculateHMAC(String key, String data)
-            throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes("UTF-8"), ALGORITHM);
+    public static final String SHA1_ALGORITHM = "HmacSHA1";
+    /**
+     * Algorithm input for TOTP Builder for HMAC-SHA256.
+     */
+    public static final String SHA256_ALGORITHM = "HmacSHA256";
+    /**
+     * Algorithm input for TOTP Builder for HMAC-SHA512.
+     */
+    public static final String SHA512_ALGORITHM = "HmacSHA512";
 
-        Mac computeMac = Mac.getInstance(ALGORITHM);
+    private HMACUtils() {}
+    /**
+     * Calculates the HMAC of the given data using the specified key and algorithm.
+     *
+     * @param key       The secret key used for HMAC generation as a byte array.
+     * @param data      The data to be hashed as a byte array.
+     * @param algorithm The HMAC algorithm to use (e.g., HmacSHA1, HmacSHA256,
+     *                  HmacSHA512).
+     * @return A byte array representing the HMAC of the input data.
+     * @throws NoSuchAlgorithmException If the HMAC algorithm is not available.
+     * @throws InvalidKeyException      If the provided key is invalid.
+     */
+    public static byte[] calculateHMAC(byte[] key, byte[] data, String algorithm)
+            throws NoSuchAlgorithmException, InvalidKeyException {
+        SecretKeySpec keySpec = new SecretKeySpec(key, algorithm);
+        Mac computeMac = Mac.getInstance(algorithm);
         computeMac.init(keySpec);
-        byte[] resHMAC = computeMac.doFinal(data.getBytes("UTF-8"));
-        return resHMAC;
+        return computeMac.doFinal(data);
+    }
+
+    /**
+     * Calculates the HMAC of the given data using the default HMAC algorithm
+     * (HmacSHA1).
+     *
+     * @param key  The secret key used for HMAC generation as a byte array.
+     * @param data The data to be hashed as a byte array.
+     * @return A byte array representing the HMAC of the input data.
+     * @throws NoSuchAlgorithmException If the HMAC algorithm is not available.
+     * @throws InvalidKeyException      If the provided key is invalid.
+     */
+    public static byte[] calculateHMAC(byte[] key, byte[] data)
+            throws NoSuchAlgorithmException, InvalidKeyException {
+        return calculateHMAC(key, data, SHA1_ALGORITHM);
     }
 
     /**

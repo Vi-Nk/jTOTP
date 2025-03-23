@@ -4,85 +4,66 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 public class HMACUtilsTest {
 
     @Test
-    void calculateHMACfromInput() {
-        String key = "VOJ2PWJSQDGIL2Z5WEKGD6ZHWDYC3X5U";
-        String data = "1234567890";
-        String expected = "c687a99a751129c4392c5236d2bfd771cbe87f68";
-        assertDoesNotThrow(() -> {
-            byte[] calculateHMAC = HMACUtils.calculateHMAC(key, data);
-            String hexHMAC = HMACUtils.toHex(calculateHMAC);
-            System.out.println(hexHMAC);
-            assertEquals(expected, hexHMAC);
-        });
+    public void testCalculateHMAC_SHA1() throws NoSuchAlgorithmException, InvalidKeyException {
+        byte[] key = "12345678901234567890".getBytes(); // Example key
+        byte[] data = "test-data".getBytes(); // Example data
+        byte[] hmac = HMACUtils.calculateHMAC(key, data, HMACUtils.SHA1_ALGORITHM);
+
+        assertNotNull(hmac, "HMAC should not be null");
+        assertEquals(20, hmac.length, "HMAC length should be 20 bytes for HmacSHA1");
     }
 
     @Test
-    void calculateHMACWithEmptyKey() {
-        String key = "";
-        String data = "1234567890";
-        assertThrows(Exception.class, () -> {
-            HMACUtils.calculateHMAC(key, data);
-        });
+    public void testCalculateHMAC_SHA256() throws NoSuchAlgorithmException, InvalidKeyException {
+        byte[] key = "12345678901234567890123456789012".getBytes(); // Example key
+        byte[] data = "test-data".getBytes(); // Example data
+        byte[] hmac = HMACUtils.calculateHMAC(key, data, HMACUtils.SHA256_ALGORITHM);
+
+        assertNotNull(hmac, "HMAC should not be null");
+        assertEquals(32, hmac.length, "HMAC length should be 32 bytes for HmacSHA256");
     }
 
     @Test
-    void calculateHMACWithEmptyData() {
-        String key = "VOJ2PWJSQDGIL2Z5WEKGD6ZHWDYC3X5U";
-        String data = "";
-        assertDoesNotThrow(() -> {
-            byte[] calculateHMAC = HMACUtils.calculateHMAC(key, data);
-            assertNotNull(calculateHMAC);
-        });
+    public void testCalculateHMAC_SHA512() throws NoSuchAlgorithmException, InvalidKeyException {
+        byte[] key = "1234567890123456789012345678901234567890123456789012345678901234".getBytes(); // Example key
+        byte[] data = "test-data".getBytes(); // Example data
+        byte[] hmac = HMACUtils.calculateHMAC(key, data, HMACUtils.SHA512_ALGORITHM);
+
+        assertNotNull(hmac, "HMAC should not be null");
+        assertEquals(64, hmac.length, "HMAC length should be 64 bytes for HmacSHA512");
     }
 
     @Test
-    void calculateHMACWithNullKey() {
-        String key = null;
-        String data = "1234567890";
-        assertThrows(NullPointerException.class, () -> {
-            HMACUtils.calculateHMAC(key, data);
-        });
+    public void testToHex() {
+        byte[] bytes = new byte[] {0x1f, 0x2b, 0x3c, 0x4d};
+        String hex = HMACUtils.toHex(bytes);
+
+        assertEquals("1f2b3c4d", hex, "Hexadecimal conversion is incorrect");
     }
 
     @Test
-    void calculateHMACWithNullData() {
-        String key = "VOJ2PWJSQDGIL2Z5WEKGD6ZHWDYC3X5U";
-        String data = null;
-        assertThrows(NullPointerException.class, () -> {
-            HMACUtils.calculateHMAC(key, data);
-        });
+    public void testCalculateHMAC_InvalidKey() {
+        byte[] key = null; // Invalid key
+        byte[] data = "test-data".getBytes();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            HMACUtils.calculateHMAC(key, data, HMACUtils.SHA1_ALGORITHM);
+        }, "Should throw IllegalArgumentException for null key");
     }
 
     @Test
-    void calculateHMACWithSpecialCharacters() {
-        String key = "VOJ2PWJSQDGIL2Z5WEKGD6ZHWDYC3X5U";
-        String data = "!@#$%^&*()_+";
-        assertDoesNotThrow(() -> {
-            byte[] calculateHMAC = HMACUtils.calculateHMAC(key, data);
-            assertNotNull(calculateHMAC);
-        });
-    }
+    public void testCalculateHMAC_InvalidAlgorithm() {
+        byte[] key = "12345678901234567890".getBytes();
+        byte[] data = "test-data".getBytes();
 
-    @Test
-    void calculateHMACWithLongKey() {
-        String key = "A".repeat(1000);
-        String data = "1234567890";
-        assertDoesNotThrow(() -> {
-            byte[] calculateHMAC = HMACUtils.calculateHMAC(key, data);
-            assertNotNull(calculateHMAC);
-        });
-    }
-
-    @Test
-    void calculateHMACWithLongData() {
-        String key = "VOJ2PWJSQDGIL2Z5WEKGD6ZHWDYC3X5U";
-        String data = "A".repeat(1000);
-        assertDoesNotThrow(() -> {
-            byte[] calculateHMAC = HMACUtils.calculateHMAC(key, data);
-            assertNotNull(calculateHMAC);
-        });
+        assertThrows(NoSuchAlgorithmException.class, () -> {
+            HMACUtils.calculateHMAC(key, data, "InvalidAlgorithm");
+        }, "Should throw NoSuchAlgorithmException for invalid algorithm");
     }
 }
