@@ -8,6 +8,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'jacoco' // Apply the JaCoCo plugin for test coverage
 }
 
 repositories {
@@ -47,4 +48,23 @@ application {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport' // Generate test coverage report after tests
+}
+
+jacoco {
+    toolVersion = "0.8.10" // Specify the JaCoCo version
+}
+
+jacocoTestReport {
+    dependsOn test // Ensure tests run before generating the report
+
+    reports {
+        csv.required.set(true) // Enable csv report for CI tools
+        html.required.set(true) // Enable HTML report for local viewing
+    }
+
+    // Exclude the example.app package from the coverage report
+    classDirectories.setFrom(
+        fileTree(dir: "$buildDir/classes/java/main", exclude: ['example/app/**'])
+    )
 }
