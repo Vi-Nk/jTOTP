@@ -77,7 +77,7 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
             groupId = 'dev.vink' // Set the group ID
-            artifactId = 'jTOTP' // Set the artifact ID
+            artifactId = 'jtotp' // Set the artifact ID
         }
     }
     repositories {
