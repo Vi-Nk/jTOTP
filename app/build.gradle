@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'jacoco' // Apply the JaCoCo plugin for test coverage
+    id 'maven-publish' // Apply the Maven Publish plugin
 }
 
 repositories {
@@ -67,4 +68,22 @@ jacocoTestReport {
     classDirectories.setFrom(
         fileTree(dir: "$buildDir/classes/java/main", exclude: ['example/app/**'])
     )
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Vi-Nk/jTOTP")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
