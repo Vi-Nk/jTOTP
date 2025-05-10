@@ -91,7 +91,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'dev.vink:jtotp:1.0.0'
+    implementation 'dev.vink:jtotp:1.0.0-<timestamp>'
 }
 ```
 
@@ -108,14 +108,14 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.vink:jtotp:1.0.0")
+    implementation("dev.vink:jtotp:1.0.0-<timestamp>")
 }
 ```
 
 ### Notes:
-1. Replace `GITHUB_ACTOR` and `GITHUB_TOKEN` with your GitHub username and a personal access token (PAT) with `read:packages` scope.
-2. Alternatively, set these as environment variables or Gradle properties (`gpr.user` and `gpr.token`).
-3. Ensure the version (`1.0.0`) matches the version you want to use.
+1. Replace `<timestamp>` with the actual timestamp generated during the build (e.g., `20231101123045`).
+2. Replace `GITHUB_ACTOR` and `GITHUB_TOKEN` with your GitHub username and a personal access token (PAT) with `read:packages` scope.
+3. Alternatively, set these as environment variables or Gradle properties (`gpr.user` and `gpr.token`).
 
 ## Contributing
 
