@@ -38,7 +38,15 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
-      
+
+    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
+    # the publishing section of your build.gradle
+    - name: Publish to GitHub Packages
+      run: ./gradlew publish
+      env:
+        USERNAME: ${{ github.actor }}
+        TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ 
     - name: Summarize tests results
       uses: jeantessier/test-summary-action@v1.0.8
       if: ${{ always() }}
