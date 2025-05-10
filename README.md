@@ -2,7 +2,6 @@
 [![Build status](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml/badge.svg?branch=main)](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml)
 ![GitHub License](https://img.shields.io/github/license/Vi-Nk/jTOTP)
 
-
 jTOTP is a lightweight Java library for generating Time-based One-Time Passwords (TOTP) compliant with [RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238). It provides utilities for generating TOTP, HMAC, and secret keys, as well as creating OTP URLs compatible with Google Authenticator and other similar TOTP-based applications.
 
 ## Features
@@ -74,6 +73,49 @@ for (long timestamp : timestamps) {
     System.out.println("TOTP for timestamp " + timestamp + ": " + totp);
 }
 ```
+
+## Adding jTOTP to Your Project
+
+To include `jTOTP` in your project from GitHub Packages, you can use the following configurations:
+
+### Gradle (Groovy DSL)
+```gradle
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/Vi-Nk/jTOTP")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    implementation 'dev.vink:jtotp:1.0.0'
+}
+```
+
+### Gradle (Kotlin DSL)
+```kotlin
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/Vi-Nk/jTOTP")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    implementation("dev.vink:jtotp:1.0.0")
+}
+```
+
+### Notes:
+1. Replace `GITHUB_ACTOR` and `GITHUB_TOKEN` with your GitHub username and a personal access token (PAT) with `read:packages` scope.
+2. Alternatively, set these as environment variables or Gradle properties (`gpr.user` and `gpr.token`).
+3. Ensure the version (`1.0.0`) matches the version you want to use.
 
 ## Contributing
 
