@@ -2,8 +2,7 @@ name: Deploy Javadoc and Publish Package
 
 on:
   push:
-    tags:
-      - '*'
+    branches: [ "main" ]
 
 jobs:
   publish:
@@ -34,17 +33,14 @@ jobs:
       - name: Generate Javadoc
         run: ./gradlew javadoc
 
-      - name: Verify Javadoc Directory
-        run: |
-          if [ ! -d "build/docs/javadoc" ]; then
-            echo "Javadoc directory not found!"
-            exit 1
-          fi
-
       - name: Publish Javadoc to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/docs/javadoc
-          publish_branch: javadoc
-          keep_files: true
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git clone --branch javadoc https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} gh-pages
+          rm -rf gh-pages/*
+          cp -r build/docs/javadoc/* gh-pages/
+          cd gh-pages
+          git add .
+          git commit -m "Update Javadoc for ${{ github.ref_name }}"
+          git push
