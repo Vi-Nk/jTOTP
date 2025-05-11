@@ -33,6 +33,9 @@ jobs:
       - name: Generate Javadoc
         run: ./gradlew javadoc
 
+      - name: XDTesting Print Directory Structure
+        uses: FiorelaCiroku/XDTesting-Print-Directory-Structure@v1.0.2
+
       - name: Publish Javadoc to GitHub Pages
         run: |
           git config --global user.name "${{ github.actor }}"
