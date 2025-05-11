@@ -28,5 +28,9 @@ replay_pid*
 .vscode
 
 # Ignore Gradle build output directory
-build
+/build/
+/build/*
+!/build/docs/
+/build/docs/*
+!/build/docs/javadoc/
 !/gradle/wrapper/gradle-wrapper.jar
