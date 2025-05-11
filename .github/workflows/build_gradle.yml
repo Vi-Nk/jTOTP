@@ -48,6 +48,16 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         ./gradlew publish
+
+    - name: Generate Javadoc
+      run: ./gradlew javadoc
+
+    - name: Publish Javadoc to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: build/docs/javadoc
+        publish_branch: gh-pages
  
     - name: Summarize tests results
       uses: jeantessier/test-summary-action@v1.0.8
