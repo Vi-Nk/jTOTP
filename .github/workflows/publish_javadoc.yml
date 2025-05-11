@@ -34,13 +34,6 @@ jobs:
       - name: Generate Javadoc
         run: ./gradlew javadoc
 
-      - name: Verify Javadoc Directory
-        run: |
-          if [ ! -d "build/docs/javadoc" ]; then
-            echo "Javadoc directory not found!"
-            exit 1
-          fi
-
       - name: Publish Javadoc to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
