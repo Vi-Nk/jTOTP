@@ -2,7 +2,8 @@ name: Deploy Javadoc and Publish Package
 
 on:
   push:
-    branches: ["main"]
+    tags:
+      - "*"
 
 jobs:
   publish:
@@ -44,7 +45,7 @@ jobs:
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git clone --branch javadoc https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} gh-pages
           rm -rf gh-pages/*
-          cp -r build/docs/javadoc/* gh-pages/
+          cp -r app/build/docs/javadoc/* gh-pages/
           cd gh-pages
           git add .
           git commit -m "Update Javadoc for $(cat version.txt)"
