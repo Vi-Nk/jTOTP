@@ -2,15 +2,13 @@ name: Deploy Javadoc and Publish Package
 
 on:
   push:
-    tags:
-      - "*"
+    branches: ["main"]
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,20 +22,18 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build, Sign, and Publish to Repositories
+      - name: Generate Javadoc
+        run: ./gradlew javadoc
+
+      - name: Build, Sign, and Publish to Maven Central
         env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           SIGNING_SECRET_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         run: |
-          ./gradlew publish -Pversion=$(cat version.txt)
-
-      - name: Generate Javadoc
-        run: ./gradlew javadoc
+          ./gradlew publish
 
       - name: Publish Javadoc to GitHub Pages
         run: |

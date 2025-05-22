@@ -10,6 +10,7 @@ plugins {
     id 'application'
     id 'jacoco' // Apply the JaCoCo plugin for test coverage
     id 'maven-publish' // Apply the Maven Publish plugin
+    id 'signing' // Add back the signing plugin
 }
 
 def versionFile = file('version.txt')
@@ -23,7 +24,16 @@ def newVersion = "${versionParts[0]}.${versionParts[1]}.${(versionParts[2] as in
 version = newVersion // Use the incremented version
 
 // Update the version.txt file with the new version
-versionFile.text = newVersion
+tasks.register('updateVersionFile') {
+    doLast {
+        versionFile.text = newVersion
+    }
+}
+
+// Ensure version.txt is updated after the publish task
+tasks.named('publish') {
+    finalizedBy 'updateVersionFile'
+}
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -90,20 +100,36 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            groupId = 'dev.vink' // Set the group ID
-            artifactId = 'jtotp' // Set the artifact ID
-            version = project.version // Use the dynamic version
+            groupId = 'io.github.vi-nk'
+            artifactId = 'jtotp'
+            version = project.version
+
+            pom {
+                name = 'jTOTP'
+                description = 'A Java Time-based One-Time Password Generator'
+                url = 'https://github.com/Vi-Nk/jTOTP'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'vi-nk'
+                        name = 'Vi-Nk'
+                        email = 'vi-nk@example.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/Vi-Nk/jTOTP.git'
+                    developerConnection = 'scm:git:ssh://github.com/Vi-Nk/jTOTP.git'
+                    url = 'https://github.com/Vi-Nk/jTOTP'
+                }
+            }
         }
     }
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/Vi-Nk/jTOTP")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-                password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
         maven {
             name = "MavenCentral"
             url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
@@ -115,11 +141,18 @@ publishing {
     }
 }
 
+// Configure signing but only execute it during publish
 signing {
-    useInMemoryPgpKeys(
-        project.findProperty("signing.keyId") ?: System.getenv("SIGNING_KEY_ID"),
-        project.findProperty("signing.secretKeyRingFile") ?: System.getenv("SIGNING_SECRET_KEY"),
-        project.findProperty("signing.password") ?: System.getenv("SIGNING_PASSWORD")
-    )
-    sign publishing.publications.mavenJava
+    def signingKeyId = findProperty("signingKeyId") ?: System.getenv("SIGNING_KEY_ID")
+    def signingKey = findProperty("signingKey") ?: System.getenv("SIGNING_SECRET_KEY")
+    def signingPassword = findProperty("signingPassword") ?: System.getenv("SIGNING_PASSWORD")
+    
+    if (signingKeyId && signingKey && signingPassword) {
+        logger.info("Signing configuration found, proceeding with signing")
+        def decodedKey = signingKey.replace('\\n', '\n')
+        useInMemoryPgpKeys(signingKeyId, decodedKey, signingPassword)
+        sign publishing.publications.mavenJava
+    } else {
+        logger.warn("Signing credentials missing. Signing will be skipped")
+    }
 }

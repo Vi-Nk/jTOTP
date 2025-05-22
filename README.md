@@ -88,7 +88,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'dev.vink:jtotp:1.0.0'
+    implementation 'io.github.vi-nk:jtotp:1.0.0'
 }
 ```
 
@@ -99,14 +99,14 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.vink:jtotp:1.0.0")
+    implementation("io.github.vi-nk:jtotp:1.0.0")
 }
 ```
 
 #### Maven
 ```xml
 <dependency>
-    <groupId>dev.vink</groupId>
+    <groupId>io.github.vi-nk</groupId>
     <artifactId>jtotp</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -127,7 +127,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'dev.vink:jtotp:1.0.0'
+    implementation 'io.github.vi-nk:jtotp:1.0.0'
 }
 ```
 
@@ -144,7 +144,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.vink:jtotp:1.0.0")
+    implementation("io.github.vi-nk:jtotp:1.0.0")
 }
 ```
 
