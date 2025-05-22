@@ -77,9 +77,44 @@ for (long timestamp : timestamps) {
 
 ## Adding jTOTP to Your Project
 
-To include `jTOTP` in your project from GitHub Packages, you can use the following configurations:
+To include `jTOTP` in your project, you can use either GitHub Packages or Maven Central.
 
-### Gradle (Groovy DSL)
+### From Maven Central
+
+#### Gradle (Groovy DSL)
+```gradle
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'dev.vink:jtotp:1.0.0'
+}
+```
+
+#### Gradle (Kotlin DSL)
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("dev.vink:jtotp:1.0.0")
+}
+```
+
+#### Maven
+```xml
+<dependency>
+    <groupId>dev.vink</groupId>
+    <artifactId>jtotp</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+### From GitHub Packages
+
+#### Gradle (Groovy DSL)
 ```gradle
 repositories {
     maven {
@@ -92,11 +127,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'dev.vink:jtotp:1.0.0-<timestamp>'
+    implementation 'dev.vink:jtotp:1.0.0'
 }
 ```
 
-### Gradle (Kotlin DSL)
+#### Gradle (Kotlin DSL)
 ```kotlin
 repositories {
     maven {
@@ -109,13 +144,13 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.vink:jtotp:1.0.0-<timestamp>")
+    implementation("dev.vink:jtotp:1.0.0")
 }
 ```
 
 ### Notes:
-1. Replace `<timestamp>` with the actual timestamp generated during the build (e.g., `20231101123045`).
-2. Replace `GITHUB_ACTOR` and `GITHUB_TOKEN` with your GitHub username and a personal access token (PAT) with `read:packages` scope.
+1. Use the latest version available (e.g., `1.0.0`) for both Maven Central and GitHub Packages.
+2. Replace `GITHUB_ACTOR` and `GITHUB_TOKEN` with your GitHub username and a personal access token (PAT) with `read:packages` scope for GitHub Packages.
 3. Alternatively, set these as environment variables or Gradle properties (`gpr.user` and `gpr.token`).
 
 ## Contributing

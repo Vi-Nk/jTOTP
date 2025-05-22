@@ -2,7 +2,7 @@ name: Deploy Javadoc and Publish Package
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   publish:
@@ -23,12 +23,17 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build and Publish Package to GitHub Packages
+      - name: Build, Sign, and Publish to Repositories
         env:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          SIGNING_SECRET_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         run: |
-          ./gradlew publish -Pversion=${{ github.ref_name }}
+          ./gradlew publish -Pversion=$(cat version.txt)
 
       - name: Generate Javadoc
         run: ./gradlew javadoc
@@ -42,5 +47,5 @@ jobs:
           cp -r build/docs/javadoc/* gh-pages/
           cd gh-pages
           git add .
-          git commit -m "Update Javadoc for ${{ github.ref_name }}"
+          git commit -m "Update Javadoc for $(cat version.txt)"
           git push
