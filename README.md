@@ -2,6 +2,7 @@
 [![Build status](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml/badge.svg?branch=main)](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml)
 ![GitHub License](https://img.shields.io/github/license/Vi-Nk/jTOTP)
 [![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://Vi-Nk.github.io/jTOTP/)
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/io.github.vi-nk/jtotp/badge.svg)](https://maven-badges.sml.io/sonatype-central/io.github.vi-nk/jtotp)
 
 jTOTP is a lightweight Java library for generating Time-based One-Time Passwords (TOTP) compliant with [RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238). It provides utilities for generating TOTP, HMAC, and secret keys, as well as creating OTP URLs compatible with Google Authenticator and other similar TOTP-based applications.
 
@@ -77,29 +78,17 @@ for (long timestamp : timestamps) {
 
 ## Adding jTOTP to Your Project
 
-To include `jTOTP` in your project, you can use either GitHub Packages or Maven Central.
+The library is available on Maven Central. The version scheme follows `{baseVersion}-{buildNumber}` (e.g., 1.0.1-42) pattern.
+where:
+- `baseVersion`: Version from version.txt (e.g., 1.0.1)
+- `buildNumber`: GitHub Actions run number or 0 for local builds
 
-### From Maven Central
+### Maven Central
 
 #### Gradle (Groovy DSL)
 ```gradle
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    implementation 'io.github.vi-nk:jtotp:1.0.0'
-}
-```
-
-#### Gradle (Kotlin DSL)
-```kotlin
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation("io.github.vi-nk:jtotp:1.0.0")
+    implementation 'io.github.vi-nk:jtotp:1.0.1-42'
 }
 ```
 
@@ -108,50 +97,13 @@ dependencies {
 <dependency>
     <groupId>io.github.vi-nk</groupId>
     <artifactId>jtotp</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-42</version>
 </dependency>
 ```
 
-### From GitHub Packages
-
-#### Gradle (Groovy DSL)
-```gradle
-repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/Vi-Nk/jTOTP")
-        credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-            password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
-}
-
-dependencies {
-    implementation 'io.github.vi-nk:jtotp:1.0.0'
-}
-```
-
-#### Gradle (Kotlin DSL)
-```kotlin
-repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/Vi-Nk/jTOTP")
-        credentials {
-            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-            password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
-}
-
-dependencies {
-    implementation("io.github.vi-nk:jtotp:1.0.0")
-}
-```
-
-### Notes:
-1. Use the latest version available (e.g., `1.0.0`) for both Maven Central and GitHub Packages.
-2. Replace `GITHUB_ACTOR` and `GITHUB_TOKEN` with your GitHub username and a personal access token (PAT) with `read:packages` scope for GitHub Packages.
-3. Alternatively, set these as environment variables or Gradle properties (`gpr.user` and `gpr.token`).
+### Requirements
+- Java 17 or higher
+- Gradle 8.5+ (for building from source)
 
 ## Contributing
 
