@@ -1,7 +1,7 @@
 # jTOTP - Java Time-based One-Time Password Generator
 [![Build status](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml/badge.svg?branch=main)](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml)
 ![GitHub License](https://img.shields.io/github/license/Vi-Nk/jTOTP)
-[![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://Vi-Nk.github.io/jTOTP/)
+[![javadoc.io](https://javadoc.io/badge2/io.github.vi-nk/jtotp/javadoc.svg)](https://javadoc.io/doc/io.github.vi-nk/jtotp)
 ![Maven Central Version](https://img.shields.io/maven-central/v/io.github.vi-nk/jtotp)
 
 jTOTP is a lightweight Java library for generating Time-based One-Time Passwords (TOTP) compliant with [RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238). It provides utilities for generating TOTP, HMAC, and secret keys, as well as creating OTP URLs compatible with Google Authenticator and other similar TOTP-based applications.
@@ -13,6 +13,14 @@ jTOTP is a lightweight Java library for generating Time-based One-Time Passwords
 - Generate OTP URLs following the [Google Authenticator Key URI Format](https://github.com/google/google-authenticator/wiki/Key-Uri-Format).
 - Generate Base32-encoded secret keys for OTP authentication.
 - Fully tested with RFC 6238 test vectors.
+
+## Javadoc 
+
+Javadoc of latest and previous versions can be referred from Javadoc-io through the javadoc badge or https://javadoc.io/doc/io.github.vi-nk/jtotp 
+
+OR 
+
+Javadoc of latest version from github pages : https://vi-nk.github.io/jTOTP/
 
 ## Usage
 Refer Full usage of library apis from example.app.App.java file.
