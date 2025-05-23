@@ -2,7 +2,7 @@
 [![Build status](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml/badge.svg?branch=main)](https://github.com/Vi-Nk/jTOTP/actions/workflows/build_gradle.yml)
 ![GitHub License](https://img.shields.io/github/license/Vi-Nk/jTOTP)
 [![Javadoc](https://img.shields.io/badge/JavaDoc-Online-green)](https://Vi-Nk.github.io/jTOTP/)
-[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/io.github.vi-nk/jtotp/badge.svg)](https://maven-badges.sml.io/sonatype-central/io.github.vi-nk/jtotp)
+![Maven Central Version](https://img.shields.io/maven-central/v/io.github.vi-nk/jtotp)
 
 jTOTP is a lightweight Java library for generating Time-based One-Time Passwords (TOTP) compliant with [RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238). It provides utilities for generating TOTP, HMAC, and secret keys, as well as creating OTP URLs compatible with Google Authenticator and other similar TOTP-based applications.
 
