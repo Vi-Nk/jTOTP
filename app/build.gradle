@@ -6,34 +6,29 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
-    id 'jacoco' // Apply the JaCoCo plugin for test coverage
-    id 'maven-publish' // Apply the Maven Publish plugin
-    id 'signing' // Add back the signing plugin
+    id 'jacoco' 
+    id 'maven-publish' 
+    id 'signing' 
+    id 'com.vanniktech.maven.publish' version '0.32.0'
 }
 
-def versionFile = file('version.txt')
-if (!versionFile.exists()) {
-    versionFile.text = '1.0.0'
-}
-
-def currentVersion = versionFile.text.trim()
-def versionParts = currentVersion.split('\\.')
-def newVersion = "${versionParts[0]}.${versionParts[1]}.${(versionParts[2] as int) + 1}"
-version = newVersion // Use the incremented version
-
-// Update the version.txt file with the new version
-tasks.register('updateVersionFile') {
-    doLast {
-        versionFile.text = newVersion
+def getVersion() {
+    def versionFile = file('version.txt')
+    if (!versionFile.exists()) {
+        versionFile.text = '1.0.0'
     }
+    def baseVersion = versionFile.text.trim()
+    def runNumber = System.getenv("GITHUB_RUN_NUMBER")
+    
+    if (runNumber) {
+        return "${baseVersion}-${runNumber}"
+    }
+    return "${baseVersion}-0"
 }
 
-// Ensure version.txt is updated after the publish task
-tasks.named('publish') {
-    finalizedBy 'updateVersionFile'
-}
+version = getVersion()
+project.ext.set("VERSION_NAME", version)
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -56,7 +51,7 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -96,63 +91,7 @@ jacocoTestReport {
     )
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            groupId = 'io.github.vi-nk'
-            artifactId = 'jtotp'
-            version = project.version
-
-            pom {
-                name = 'jTOTP'
-                description = 'A Java Time-based One-Time Password Generator'
-                url = 'https://github.com/Vi-Nk/jTOTP'
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'vi-nk'
-                        name = 'Vi-Nk'
-                        email = 'vi-nk@example.com'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://github.com/Vi-Nk/jTOTP.git'
-                    developerConnection = 'scm:git:ssh://github.com/Vi-Nk/jTOTP.git'
-                    url = 'https://github.com/Vi-Nk/jTOTP'
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            name = "MavenCentral"
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = project.findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME")
-                password = project.findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD")
-            }
-        }
-    }
-}
-
-// Configure signing but only execute it during publish
-signing {
-    def signingKeyId = findProperty("signingKeyId") ?: System.getenv("SIGNING_KEY_ID")
-    def signingKey = findProperty("signingKey") ?: System.getenv("SIGNING_SECRET_KEY")
-    def signingPassword = findProperty("signingPassword") ?: System.getenv("SIGNING_PASSWORD")
-    
-    if (signingKeyId && signingKey && signingPassword) {
-        logger.info("Signing configuration found, proceeding with signing")
-        def decodedKey = signingKey.replace('\\n', '\n')
-        useInMemoryPgpKeys(signingKeyId, decodedKey, signingPassword)
-        sign publishing.publications.mavenJava
-    } else {
-        logger.warn("Signing credentials missing. Signing will be skipped")
-    }
+mavenPublishing {
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
 }
